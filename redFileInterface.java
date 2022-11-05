@@ -67,10 +67,12 @@ public class redFileInterface {
             this.red_file = null;
             this.get_flag = false;
             this.put_flag = false;
-            return false;
+            if (this.get_flag) scan.close();
+            if (this.put_flag) out.close();
+            return true;
         } catch (Exception e) {
             System.out.println("Failed to close the Interface");
-            throw new RuntimeException(e);
+            return false;
         }
     }
 }
