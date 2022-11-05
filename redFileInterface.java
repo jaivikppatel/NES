@@ -53,12 +53,14 @@ public class redFileInterface {
         out.print((char) (x + 32));
     }
 
+    // sends out audit message after operations is done
     protected void endOfFile(){
         System.out.println("RedFile End Reached");
         //send audit message here
         System.out.println("The Audit message has been sent");
     }
 
+    // closes the instance
     protected boolean close(){
         try {
             this.filename = null;
