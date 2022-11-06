@@ -34,4 +34,10 @@ public class userInterface {
                 this.getOption();
         }
     }
+
+    protected void getWheelStartPositon(){
+        System.out.print("Enter the wheel starting position: ");
+        int start_pos = scan.nextInt();
+
+    }
 }
