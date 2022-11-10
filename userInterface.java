@@ -20,19 +20,18 @@ public class userInterface {
         this.password = scan.nextLine();
     }
 
-    protected void getOption(){
+    protected Opt getOption(){
         System.out.print("Select an Option:\n1. Encrypt\n2. Decrypt\n?: ");
         switch (scan.nextInt()){
             case 1:
-                option = Opt.ENCRYPT;
-                break;
+                return Opt.ENCRYPT;
             case 2:
-                option = Opt.DECRYPT;
-                break;
+                return Opt.DECRYPT;
             default:
                 System.out.println("Invalid Choice!");
                 this.getOption();
         }
+        return null;
     }
 
     protected int getWheelStartPositon(){
