@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class redFileInterface {
 
     // declarations
-    private String filename;
+    private final String filename;
     private File red_file;
     private Scanner scan;
     private Boolean get_flag, put_flag;
@@ -37,11 +37,7 @@ public class redFileInterface {
             scan = new Scanner(this.red_file);
             scan.useDelimiter("");
         }
-        if (scan.hasNext())
-            return ((int) scan.next().charAt(0) - 32);
-        else
-            this.get_flag = false;
-        return -1;
+        return ((int) scan.next().charAt(0) - 32);
     }
 
     // put next int with +32 -- used during decryption
@@ -53,11 +49,9 @@ public class redFileInterface {
         out.println((char) (x + 32));
     }
 
-    // sends out audit message after operations is done
-    protected void endOfFile(){
-        System.out.println("RedFile End Reached");
-        //send audit message here
-        System.out.println("The Audit message has been sent");
+    // checks for EOF
+    protected boolean endOfFile(){
+        return scan.hasNext();
     }
 
     // closes the instance

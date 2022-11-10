@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class blackFileInterface {
-    private String filename;
+    private final String filename;
     private boolean get_flag, put_flag;
     private File black_file;
     private Scanner scan;
@@ -25,11 +25,7 @@ public class blackFileInterface {
             this.get_flag = true;
             scan = new Scanner(this.black_file);
         }
-        if (scan.hasNext())
-            return scan.nextInt();
-        else
-            this.get_flag = false;
-        return -1;
+        return scan.nextInt();
     }
 
     protected void putNextInt(int x) throws IOException {
@@ -40,11 +36,9 @@ public class blackFileInterface {
         out.println(x);
     }
 
-    // sends out audit message after operations is done
-    protected void endOfFile(){
-        System.out.println("BlackFile End Reached");
-        //send audit message here
-        System.out.println("The Audit message has been sent");
+    // check if EOF
+    protected boolean endOfFile(){
+        return scan.hasNext();
     }
 
     // closes the instance
