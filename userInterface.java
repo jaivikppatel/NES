@@ -35,9 +35,20 @@ public class userInterface {
         }
     }
 
-    protected void getWheelStartPositon(){
+    protected int getWheelStartPositon(){
         System.out.print("Enter the wheel starting position: ");
-        int start_pos = scan.nextInt();
-
+        return scan.nextInt();
     }
+
+    protected void displayWheelEndPosition(int end_pos){
+        System.out.println("Wheel End Position is: " + end_pos);
+    }
+
+    protected void displayResult(boolean res){
+        if (res)
+            System.out.println("Operation was Successful!");
+        else
+            System.out.println("Operation Failed!");
+    }
+
 }

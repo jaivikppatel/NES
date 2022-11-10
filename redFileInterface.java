@@ -50,7 +50,7 @@ public class redFileInterface {
             this.put_flag = true;
             out = new PrintWriter(new BufferedWriter(new FileWriter("test.txt", true)));
         }
-        out.print((char) (x + 32));
+        out.println((char) (x + 32));
     }
 
     // sends out audit message after operations is done
@@ -63,10 +63,6 @@ public class redFileInterface {
     // closes the instance
     protected boolean close(){
         try {
-            this.filename = null;
-            this.red_file = null;
-            this.get_flag = false;
-            this.put_flag = false;
             if (this.get_flag) scan.close();
             if (this.put_flag) out.close();
             return true;
