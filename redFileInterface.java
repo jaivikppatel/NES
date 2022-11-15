@@ -1,68 +1,52 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.util.Scanner;
 
 public class redFileInterface {
 
     // declarations
     private final String filename;
-    private File red_file;
-    private Scanner scan;
-    private Boolean get_flag, put_flag;
-    private PrintWriter out;
+    private BufferedReader reader;
+    private PrintWriter printer;
+    private boolean EOF_flag;
 
     // initialize with red filename
     redFileInterface(String filename) {
         this.filename = filename;
-        this.get_flag = false;
-        this.put_flag = false;
     }
 
     public static redFileInterface Instance(String filename) {
         return new redFileInterface(filename);
     }
 
-    protected void openFile() {
-        this.red_file = new File(this.filename);
+    protected void openFile() throws IOException {
+        this.reader = new BufferedReader(new FileReader(this.filename));
+        this.printer = new PrintWriter(new BufferedWriter(new FileWriter(this.filename, true)));
+        this.EOF_flag = false;
     }
 
     // gets next int with -32 -- used during encryption
-    protected int getNextInt() throws FileNotFoundException {
-        if (!this.get_flag) {
-            this.get_flag = true;
-            scan = new Scanner(this.red_file);
-            scan.useDelimiter("");
+    protected int getNextInt() throws IOException {
+        int ret = reader.read() - 32;
+        if (ret < 0){
+            this.EOF_flag = true;
         }
-        return ((int) scan.next().charAt(0) - 32);
+        return ret;
     }
 
     // put next int with +32 -- used during decryption
     protected void putNextChar(int x) throws IOException {
-        if (!this.put_flag) {
-            this.put_flag = true;
-            out = new PrintWriter(new BufferedWriter(new FileWriter("test.txt", true)));
-        }
-        out.println((char) (x + 32));
+        printer.print((char) (x + 32));
     }
 
     // checks for EOF
     protected boolean endOfFile(){
-        return scan.hasNext();
+        return this.EOF_flag;
     }
 
     // closes the instance
-    protected boolean close(){
-        try {
-            if (this.get_flag) scan.close();
-            if (this.put_flag) out.close();
-            return true;
-        } catch (Exception e) {
-            System.out.println("Failed to close the Interface");
-            return false;
-        }
+    protected void close() throws IOException {
+        this.reader.close();
+        this.printer.close();
     }
 }
