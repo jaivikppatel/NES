@@ -3,53 +3,42 @@ import java.util.Scanner;
 
 public class blackFileInterface {
     private final String filename;
-    private boolean get_flag, put_flag;
-    private File black_file;
-    private Scanner scan;
-    private PrintWriter out;
+    private BufferedReader reader;
+    private PrintWriter printer;
+    private boolean EOF_flag;
 
     blackFileInterface(String filename){
         this.filename = filename;
-        this.get_flag = false;
-        this.put_flag = false;
     }
 
     public static blackFileInterface Instance(String filename) { return new blackFileInterface(filename); }
 
-    protected void openFile() {
-        this.black_file = new File(this.filename);
+    protected void openFile() throws IOException {
+        this.reader = new BufferedReader(new FileReader(this.filename));
+        this.printer = new PrintWriter(new BufferedWriter(new FileWriter(this.filename, true)));
+        this.EOF_flag = false;
     }
 
-    protected int getNextInt() throws FileNotFoundException {
-        if (!this.get_flag) {
-            this.get_flag = true;
-            scan = new Scanner(this.black_file);
+    protected int getNextInt() throws IOException {
+        int ret = Integer.parseInt(reader.readLine());
+        if (ret < 0){
+            this.EOF_flag = true;
         }
-        return scan.nextInt();
+        return ret;
     }
 
     protected void putNextInt(int x) throws IOException {
-        if (!this.put_flag) {
-            this.put_flag = true;
-            out = new PrintWriter(new BufferedWriter(new FileWriter("test.txt", true)));
-        }
-        out.println(x);
+        printer.println(x);
     }
 
     // check if EOF
     protected boolean endOfFile(){
-        return scan.hasNext();
+        return this.EOF_flag;
     }
 
     // closes the instance
-    protected boolean close(){
-        try {
-            if (this.get_flag) scan.close();
-            if (this.put_flag) out.close();
-            return true;
-        } catch (Exception e) {
-            System.out.println("Failed to close the Interface");
-            return false;
-        }
+    protected void close() throws IOException {
+        this.reader.close();
+        this.printer.close();
     }
 }
