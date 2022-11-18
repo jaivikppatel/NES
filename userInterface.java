@@ -10,14 +10,16 @@ public class userInterface {
     private Opt option;
     Scanner scan = new Scanner(System.in);
 
-    protected void getTeamName(){
+    protected String getTeamName(){
         System.out.print("Enter Team name: ");
         this.team_name = scan.nextLine();
+        return this.team_name;
     }
 
-    protected void getPassword(){
+    protected String getPassword(){
         System.out.print("Enter Password: ");
         this.password = scan.nextLine();
+        return this.password;
     }
 
     protected Opt getOption(){
