@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -6,10 +9,9 @@ import java.util.Scanner;
 public class blackFileInterface {
     private final String filename;
     private final Opt opt;
-    private BufferedReader reader;
-    private PrintWriter printer;
+    private Scanner scan;
     private int itr;
-    private ArrayList<Integer> int_list = new ArrayList<>();
+    private final ArrayList<Integer> int_list = new ArrayList<>();
 
     blackFileInterface(String filename, Opt opt){
         this.filename = filename;
@@ -20,16 +22,13 @@ public class blackFileInterface {
     public static blackFileInterface Instance(String filename, Opt opt) { return new blackFileInterface(filename, opt); }
 
     protected void openFile() throws IOException {
-        if (this.opt == Opt.ENCRYPT){
-            int temp;
-            this.reader = new BufferedReader(new FileReader(this.filename));
-            while ((temp = Integer.parseInt(reader.readLine())) != -1){
-                int_list.add(temp);
+        if (this.opt == Opt.DECRYPT){
+            scan = new Scanner(new File(this.filename));
+            while (scan.hasNext()){
+                int_list.add(scan.nextInt());
             }
             Collections.reverse(int_list);
         }
-        if (this.opt == Opt.DECRYPT)
-            this.printer = new PrintWriter(new BufferedWriter(new FileWriter(this.filename, true)));
     }
 
     protected int getNextInt() throws IOException {
@@ -39,7 +38,8 @@ public class blackFileInterface {
     }
 
     protected void putNextInt(int x) throws IOException {
-        printer.println(x);
+        Files.write(Paths.get(this.filename), String.valueOf(x).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        Files.write(Paths.get(this.filename), "\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
     // check if EOF
@@ -49,7 +49,7 @@ public class blackFileInterface {
 
     // closes the instance
     protected void close() throws IOException {
-        this.reader.close();
-        this.printer.close();
+        if (opt == Opt.DECRYPT)
+            scan.close();
     }
 }

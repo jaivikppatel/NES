@@ -1,4 +1,7 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class redFileInterface {
@@ -7,8 +10,7 @@ public class redFileInterface {
     private final String filename;
     private final Opt opt;
     private BufferedReader reader;
-    private PrintWriter printer;
-    private ArrayList<Integer> int_list = new ArrayList<>();
+    private final ArrayList<Integer> int_list = new ArrayList<>();
     private int itr;
 
     // initialize with red filename
@@ -30,20 +32,21 @@ public class redFileInterface {
                 int_list.add(temp);
             }
         }
-        if (this.opt == Opt.DECRYPT)
-            this.printer = new PrintWriter(new BufferedWriter(new FileWriter(this.filename, true)));
     }
 
     // gets next int with -32 -- used during encryption
     protected int getNextInt() throws IOException {
         int ret = int_list.get(itr);
         itr++;
-        return ret;
+        System.out.println((ret-32) + " : " + (char)ret);
+        return (ret-32);
     }
 
     // put next int with +32 -- used during decryption
     protected void putNextChar(int x) throws IOException {
-        printer.print((char) (x + 32));
+        String s = String.valueOf((char) (x + 32));
+      //  System.out.println(x + "~" + (x+32) + "~" + s);
+        Files.write(Paths.get(this.filename), s.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
     // checks for EOF
@@ -55,7 +58,5 @@ public class redFileInterface {
     protected void close() throws IOException {
         if (this.opt == Opt.ENCRYPT)
             this.reader.close();
-        if (this.opt == Opt.DECRYPT)
-            this.printer.close();
     }
 }
